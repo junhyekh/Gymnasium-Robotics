@@ -14,7 +14,9 @@ import math
 import tempfile
 import time
 import xml.etree.ElementTree as ET
+import os
 from os import path
+from tempfile import mkdtemp
 from typing import Dict, List, Optional, Union
 
 import numpy as np
@@ -235,10 +237,15 @@ class Maze:
         maze._unique_reset_locations += maze._combined_locations
 
         # Save new xml with maze to a temporary file
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            temp_xml_name = f"ant_maze{str(time.time())}.xml"
-            temp_xml_path = path.join(path.dirname(tmp_dir), temp_xml_name)
-            tree.write(temp_xml_path)
+        # with tempfile.TemporaryDirectory() as tmp_dir:
+        #     temp_xml_name = f"ant_maze{str(time.time())}.xml"
+        #     temp_xml_path = path.join(path.dirname(tmp_dir), temp_xml_name)
+        #     tree.write(temp_xml_path)
+        tmp_dir = mkdtemp()
+        os.makedirs(tmp_dir, exist_ok=True)
+        temp_xml_path = path.join(tmp_dir, "ant_maze.xml")
+        tree.write(temp_xml_path)
+
 
         return maze, temp_xml_path
 
